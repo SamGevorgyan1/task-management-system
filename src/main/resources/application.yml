@@ -1,0 +1,36 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  datasource:
+    username: root
+    password: Sam158@_
+    url: jdbc:mysql://localhost:3306/task_management_system?createDatabaseIfNotExist=true
+
+  mail:
+    username: samg05981@gmail.com
+    password: tbkvuisjuyhvfwsm
+    port: 587
+    host: smtp.gmail.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
+          required: true
+
+server:
+  port: 9090
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+jwt:
+  token:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expired: 86400000
+  refresh:
+    token: 604800000
