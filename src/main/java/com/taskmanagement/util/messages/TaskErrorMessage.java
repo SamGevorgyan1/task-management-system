@@ -2,17 +2,22 @@ package com.taskmanagement.util.messages;
 
 public interface TaskErrorMessage {
 
-    String TASK_NOT_FOUND_MSG = "Task not found with given id";
+    // Task Not Found Error
+    String TASK_NOT_FOUND = "Task not found with the given ID";
 
-    String ASSIGNEE_NOT_FOUND = "Assignee not found with given email";
+    // Assignee Not Found Error
+    String ASSIGNEE_NOT_FOUND = "Assignee not found with the given email";
 
-    String ERROR_CREATING_TASK = "Error during creating task";
-    String ERROR_GETTING_TASKS = "Error during getting tasks";
-    String ERROR_GETTING_TASK = "Error during getting task";
-    String ERROR_UPDATING_TASK = "Error during updating task";
-    String ERROR_DELETING_TASK = "Error during deleting task";
+    // General Task Errors
+    String ERROR_CREATING_TASK = "Error creating task";
+    String ERROR_GETTING_TASKS = "Error getting tasks";
+    String ERROR_GETTING_TASK = "Error getting task";
+    String ERROR_UPDATING_TASK = "Error updating task";
+    String ERROR_DELETING_TASK = "Error deleting task";
 
+    // Task Status Validation Error
     String INVALID_TASK_STATUS = "Invalid task status. Allowed values are: PENDING, IN_PROGRESS, COMPLETED";
-    String INVALID_TASK_PRIORITY = "Invalid task priority. Allowed values are: HIGH, MEDIUM, LOW";
 
+    // Task Priority Validation Error
+    String INVALID_TASK_PRIORITY = "Invalid task priority. Allowed values are: HIGH, MEDIUM, LOW";
 }

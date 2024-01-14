@@ -24,7 +24,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             AppApiException.class,
             AppNotFoundException.class,
             AppResourceAlreadyExistsException.class,
-            AppForbiddenException.class,
             AppUnauthorizedOperationException.class
     })
     @ResponseBody
@@ -38,8 +37,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             status = HttpStatus.NOT_FOUND;
         } else if (exception instanceof AppResourceAlreadyExistsException) {
             status = HttpStatus.CONFLICT;
-        } else if (exception instanceof AppForbiddenException) {
-            status = HttpStatus.FORBIDDEN;
         } else if (exception instanceof AppUnauthorizedOperationException) {
             status = HttpStatus.UNAUTHORIZED;
         } else {

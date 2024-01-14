@@ -21,5 +21,4 @@ public interface CommentService {
     List<CommentResponseDTO> getCommentsByTaskId(Integer taskId,String userEmail) throws CommentApiException;
 
     CommentResponseDTO updateComment(Integer commentId, String userEmail, CommentDTO commentDTO) throws CommentApiException;
-
 }

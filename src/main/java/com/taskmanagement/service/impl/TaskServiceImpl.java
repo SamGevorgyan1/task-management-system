@@ -28,6 +28,7 @@ import static com.taskmanagement.util.messages.TaskErrorMessage.*;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
+
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
@@ -94,9 +95,7 @@ public class TaskServiceImpl implements TaskService {
         // Parse the task status from the provided string.
         TaskStatus taskStatus;
 
-        if (taskId==null){
-            throw new TaskBadRequestException("Task id can not be null");
-        }
+       validateTaskId(taskId);
 
         if (status == null || status.isEmpty()) {
             throw new TaskBadRequestException("Task status can not be null or empty");
@@ -125,9 +124,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public void deleteTask(Integer taskId, String deleterEmail) throws TaskApiException, TaskBadRequestException {
-        if (taskId == null) {
-            throw new TaskBadRequestException("Task id can not be null");
-        }
+
+        validateTaskId(taskId);
         // Retrieve the task and check if the deleter has the required permissions.
         TaskEntity task = getTaskByIdAndCheckOwnership(taskId, deleterEmail);
 
@@ -152,9 +150,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskEntity getTaskById(Integer taskId) throws TaskApiException, TaskBadRequestException {
         // Check if the provided task ID is valid.
-        if (taskId == null) {
-            throw new TaskBadRequestException("Task id can not be null");
-        }
+        validateTaskId(taskId);
 
         Optional<TaskEntity> task;
         try {
@@ -166,10 +162,11 @@ public class TaskServiceImpl implements TaskService {
 
         // Check if the task is present; otherwise, throw an exception.
         if (task.isEmpty()) {
-            throw new TaskNotFoundException(TASK_NOT_FOUND_MSG);
+            throw new TaskNotFoundException(TASK_NOT_FOUND);
         }
         return task.get();
     }
+
 
     /**
      * Retrieves a list of tasks based on various criteria such as author, assignee, status, and priority.
@@ -195,6 +192,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskPriority != null) {
             priority = parseEnum(taskPriority, TaskPriority.class, new TaskBadRequestException(INVALID_TASK_PRIORITY));
         }
+
 
         try {
             // Retrieve tasks based on the provided criteria.
@@ -353,5 +351,12 @@ public class TaskServiceImpl implements TaskService {
 
         // Return the retrieved UserEntity.
         return user;
+    }
+
+
+    private void validateTaskId(Integer taskId) throws TaskBadRequestException {
+        if (taskId == null) {
+            throw new TaskBadRequestException("Task id can not be null");
+        }
     }
 }

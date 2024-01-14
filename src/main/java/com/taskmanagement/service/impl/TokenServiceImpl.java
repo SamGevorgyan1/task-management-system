@@ -4,18 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taskmanagement.dto.responsedto.AuthenticationResponseDTO;
 import com.taskmanagement.enums.TokenType;
 import com.taskmanagement.exceptions.TokenApiException;
-import com.taskmanagement.exceptions.UserApiException;
-import com.taskmanagement.exceptions.UserBadRequestException;
 import com.taskmanagement.model.TokenEntity;
 import com.taskmanagement.model.UserEntity;
 import com.taskmanagement.repository.TokenRepository;
+import com.taskmanagement.repository.UserRepository;
 import com.taskmanagement.security.CustomUserDetails;
 import com.taskmanagement.security.jwt.JwtService;
 import com.taskmanagement.service.TokenService;
-import com.taskmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class TokenServiceImpl implements TokenService {
 
     private final JwtService jwtService;
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public void saveUserToken(UserEntity user, String jwtToken) throws TokenApiException {
@@ -48,6 +47,7 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+
     @Override
     public void revokeAllUserTokens(UserEntity user) throws TokenApiException {
         List<TokenEntity> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
@@ -64,6 +64,7 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+
     @Override
     public void refreshToken(
             HttpServletRequest request,
@@ -79,14 +80,10 @@ public class TokenServiceImpl implements TokenService {
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
             UserEntity user;
-            try {
-                user = userService.findByEmail(userEmail);
-            } catch (UserApiException e) {
-                throw new RuntimeException(e);
-            } catch (UserBadRequestException e) {
-                throw new RuntimeException(e);
-            }
+            user = userRepository.findByEmail(userEmail);
+
             CustomUserDetails customUserDetails = new CustomUserDetails(user);
+
             if (jwtService.isTokenValid(refreshToken, customUserDetails)) {
                 String accessToken = jwtService.generateToken(customUserDetails);
                 revokeAllUserTokens(user);

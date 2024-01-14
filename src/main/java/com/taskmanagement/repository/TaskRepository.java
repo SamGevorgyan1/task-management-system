@@ -11,13 +11,11 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
 
-
     List<TaskEntity> findByAuthorEmail(String authorEmail);
 
     List<TaskEntity> findByAuthorEmailAndStatus(String authorEmail, TaskStatus taskStatus);
 
     List<TaskEntity> findByAuthorEmailAndPriority(String authorEmail, TaskPriority taskPriority);
-
 
     List<TaskEntity> findByAssigneeEmailAndStatus(String authorEmail, TaskStatus taskStatus);
 
@@ -27,9 +25,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
 
     List<TaskEntity> findByAuthorEmailAndAssigneeEmailAndStatusAndPriority(String authorEmail, String assigneeEmail, TaskStatus taskStatus, TaskPriority taskPriority);
 
-
     List<TaskEntity> findByAssigneeEmail(String assigneeEmail);
 
     List<TaskEntity> findByAuthorEmailAndAssigneeEmail(String authorEmail, String assigneeEmail);
-
 }

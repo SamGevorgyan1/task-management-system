@@ -17,6 +17,7 @@ public class CommentDTOConverter {
                 .build();
     }
 
+
     public static List<CommentResponseDTO> convertCommentEntitiesToDTOS(List<CommentEntity> commentEntities) {
         return commentEntities.stream()
                 .map(CommentDTOConverter::convertCommentEntityToDTO)

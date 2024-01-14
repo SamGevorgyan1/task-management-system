@@ -27,6 +27,7 @@ public class UserValidator {
         }
     }
 
+
     public static void yearValidator(Integer year) throws UserBadRequestException {
         if (year<1910||year>2023){
             throw new UserBadRequestException("Invalid year");

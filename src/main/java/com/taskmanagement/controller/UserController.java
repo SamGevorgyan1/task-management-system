@@ -24,7 +24,6 @@ import static com.taskmanagement.util.converters.UserDTOConverter.convertUserEnt
 public class UserController {
 
     private final UserService userService;
-
     private final HttpSession session;
 
     @GetMapping
@@ -32,6 +31,7 @@ public class UserController {
         UserEntity user = userService.findByEmail(email);
         return convertUserEntityToDTO(user);
     }
+
 
     @GetMapping("/get-all")
     public @ResponseBody List<UserResponseDTO> getAll(@RequestParam(required = false) String name,
@@ -41,10 +41,12 @@ public class UserController {
         return userService.getAll(name, surname, role);
     }
 
+
     @PutMapping("/{id}")
     public @ResponseBody UserResponseDTO updateUser(@PathVariable Integer id, @RequestBody @Valid UserDTO userDTO) throws UserApiException, UserBadRequestException {
         return userService.updateUser(id, userDTO);
     }
+
 
     @PatchMapping("/")
     public @ResponseBody UserResponseDTO updatePassword(@RequestParam String oldPassword,
@@ -55,10 +57,12 @@ public class UserController {
         return userService.updatePassword(principal.getName(), oldPassword, newPassword, confirmPassword);
     }
 
+
     @PostMapping("/verify-user")
     public boolean verifyUser(@RequestParam String verifyCode, @RequestParam String email) throws UserApiException, UserBadRequestException {
         return userService.verifyUser(verifyCode,email);
     }
+
 
     @PatchMapping("/forgot-password")
     public void forgotPassword(@RequestParam String email, HttpServletRequest request) throws UserApiException, UserBadRequestException {
@@ -66,6 +70,7 @@ public class UserController {
 
         userService.forgotPassword(email);
     }
+
 
     @PatchMapping("/set-password")
     public @ResponseBody boolean setPassword(@RequestParam String resetToken,
@@ -78,6 +83,7 @@ public class UserController {
         session.removeAttribute("email");
         return isUpdated;
     }
+
 
     @PostMapping("/send-verification-code")
     public void sendVerificationCode(@RequestParam String email) throws UserApiException, UserBadRequestException {

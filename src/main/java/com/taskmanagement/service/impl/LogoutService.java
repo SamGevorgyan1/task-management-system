@@ -1,4 +1,4 @@
-package com.taskmanagement.security;
+package com.taskmanagement.service.impl;
 
 import com.taskmanagement.model.TokenEntity;
 import com.taskmanagement.repository.TokenRepository;

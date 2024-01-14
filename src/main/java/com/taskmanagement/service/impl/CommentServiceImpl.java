@@ -21,7 +21,7 @@ import static com.taskmanagement.util.converters.CommentDTOConverter.convertComm
 import static com.taskmanagement.util.converters.CommentDTOConverter.convertCommentEntityToDTO;
 import static com.taskmanagement.util.messages.CommentErrorMessage.*;
 import static com.taskmanagement.util.messages.CommonErrorMessage.UNAUTHORIZED_OPERATION_MSG;
-import static com.taskmanagement.util.messages.TaskErrorMessage.TASK_NOT_FOUND_MSG;
+import static com.taskmanagement.util.messages.TaskErrorMessage.TASK_NOT_FOUND;
 
 
 @Service
@@ -34,6 +34,17 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
 
 
+    /**
+     * Creates a new comment for the specified task and user.
+     *
+     * @param taskId     The ID of the task for which the comment is created.
+     * @param userEmail  The email of the user creating the comment.
+     * @param commentDTO The DTO containing the comment information.
+     * @return CommentResponseDTO representing the created comment.
+     * @throws CommentApiException                   If an error occurs during comment creation.
+     * @throws CommentBadRequestException            If the request is malformed.
+     * @throws CommentUnauthorizedOperationException If the user is not authorized to perform the operation.
+     */
     @Override
     public CommentResponseDTO createComment(Integer taskId, String userEmail, CommentDTO commentDTO) throws CommentApiException {
 
@@ -43,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<TaskEntity> task = taskRepository.findById(taskId);
 
         if (task.isEmpty()) {
-            throw new TaskNotFoundException(TASK_NOT_FOUND_MSG);
+            throw new TaskNotFoundException(TASK_NOT_FOUND);
         }
         if (!checkCommentPermission(task.get(), userEmail)) {
             throw new CommentUnauthorizedOperationException(UNAUTHORIZED_OPERATION_MSG);
@@ -60,6 +71,15 @@ public class CommentServiceImpl implements CommentService {
         return convertCommentEntityToDTO(saveComment(commentEntity));
     }
 
+
+    /**
+     * Deletes the comment with the specified ID, performed by the user with the given email.
+     *
+     * @param commentId The ID of the comment to be deleted.
+     * @param userEmail The email of the user attempting to delete the comment.
+     * @throws CommentApiException                   If an error occurs during comment deletion.
+     * @throws CommentUnauthorizedOperationException If the user is not authorized to perform the operation.
+     */
     @Override
     public void deleteComment(Integer commentId, String userEmail) throws CommentApiException {
         CommentEntity comment = getCommentById(commentId);
@@ -70,10 +90,19 @@ public class CommentServiceImpl implements CommentService {
         try {
             commentRepository.delete(comment);
         } catch (Exception e) {
-            throw new CommentApiException(ERROR_DELETING_COMMENT_MSG);
+            throw new CommentApiException(ERROR_DELETING_COMMENT);
         }
     }
 
+
+    /**
+     * Retrieves a comment based on the provided comment ID.
+     *
+     * @param commentId The ID of the comment to be retrieved.
+     * @return CommentEntity representing the retrieved comment.
+     * @throws CommentApiException    If an error occurs during comment retrieval.
+     * @throws CommentNotFoundException If the comment with the specified ID is not found.
+     */
     @Override
     public CommentEntity getCommentById(Integer commentId) throws CommentApiException {
         if (commentId == null) {
@@ -83,15 +112,25 @@ public class CommentServiceImpl implements CommentService {
         try {
             comment = commentRepository.findById(commentId);
         } catch (Exception e) {
-            throw new CommentApiException(ERROR_GETTING_COMMENTS_MSG);
+            throw new CommentApiException(ERROR_GETTING_COMMENTS);
         }
 
         if (comment.isEmpty()) {
-            throw new CommentNotFoundException(COMMENT_NOT_FOUND_MSG);
+            throw new CommentNotFoundException(COMMENT_NOT_FOUND);
         }
         return comment.get();
     }
 
+
+    /**
+     * Retrieves all comments for a specific task, performed by the user with the given email.
+     *
+     * @param taskId    The ID of the task for which comments are retrieved.
+     * @param userEmail The email of the user attempting to retrieve comments.
+     * @return List of CommentResponseDTO representing comments for the specified task.
+     * @throws CommentApiException                   If an error occurs during comment retrieval.
+     * @throws CommentUnauthorizedOperationException If the user is not authorized to perform the operation.
+     */
     @Override
     public List<CommentResponseDTO> getCommentsByTaskId(Integer taskId, String userEmail) throws CommentApiException {
 
@@ -101,7 +140,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<TaskEntity> task = taskRepository.findById(taskId);
 
         if (task.isEmpty()) {
-            throw new TaskNotFoundException(TASK_NOT_FOUND_MSG);
+            throw new TaskNotFoundException(TASK_NOT_FOUND);
         }
         if (!checkCommentPermission(task.get(), userEmail)) {
             throw new CommentUnauthorizedOperationException(UNAUTHORIZED_OPERATION_MSG);
@@ -109,11 +148,21 @@ public class CommentServiceImpl implements CommentService {
         try {
             return convertCommentEntitiesToDTOS(commentRepository.findByTaskTaskId(taskId));
         } catch (Exception e) {
-            throw new CommentApiException(ERROR_GETTING_COMMENTS_MSG);
+            throw new CommentApiException(ERROR_GETTING_COMMENTS);
         }
     }
 
 
+    /**
+     * Updates the content of the comment with the specified ID, performed by the user with the given email.
+     *
+     * @param commentId The ID of the comment to be updated.
+     * @param userEmail  The email of the user attempting to update the comment.
+     * @param commentDTO The DTO containing the updated comment information.
+     * @return CommentResponseDTO representing the updated comment.
+     * @throws CommentApiException                   If an error occurs during comment update.
+     * @throws CommentUnauthorizedOperationException If the user is not authorized to perform the operation.
+     */
     @Override
     public CommentResponseDTO updateComment(Integer commentId, String userEmail, CommentDTO commentDTO) throws CommentApiException {
         CommentEntity comment = getCommentById(commentId);
@@ -130,7 +179,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             return commentRepository.save(commentEntity);
         } catch (Exception e) {
-            throw new CommentApiException(ERROR_SAVING_COMMENT_MSG);
+            throw new CommentApiException(ERROR_SAVING_COMMENT);
         }
     }
 

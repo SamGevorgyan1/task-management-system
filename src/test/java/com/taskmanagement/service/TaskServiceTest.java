@@ -70,6 +70,7 @@ public class TaskServiceTest {
         verify(taskRepository, times(1)).save(any());
     }
 
+
     @Test
     void updateTaskByAuthorTest() throws TaskApiException, TaskBadRequestException, UserBadRequestException {
 
@@ -109,6 +110,7 @@ public class TaskServiceTest {
             taskService.updateTaskByAuthor(1, taskDTO, author.getEmail());
         });
     }
+
 
     @Test
     void updateTaskByAssigneeTest() throws Exception {
@@ -151,6 +153,7 @@ public class TaskServiceTest {
         assertThrows(TaskApiException.class, () -> taskService.deleteTask(1, author.getEmail()));
     }
 
+
     @Test
     void getTaskByIdTest() throws TaskApiException, TaskBadRequestException {
         given(taskRepository.findById(any(Integer.class))).willReturn(Optional.ofNullable(taskEntity));
@@ -174,6 +177,7 @@ public class TaskServiceTest {
 
         assertThrows(TaskApiException.class, () -> taskService.getTaskById(1));
     }
+
 
     @Test
     void getTasksByAuthorTest() {
@@ -211,6 +215,7 @@ public class TaskServiceTest {
 
         assertThrows(TaskApiException.class, () -> taskService.getTasksByAuthor(author.getEmail(), assignee.getEmail(), null, null));
     }
+
 
     @Test
     void getTasksByAssigneeTest() {
@@ -275,6 +280,7 @@ public class TaskServiceTest {
         taskEntity.setComments(List.of(new CommentEntity(1, "", assignee, null)));
         return taskEntity;
     }
+
 
     private TaskEntity createTaskEntity(UserEntity author, UserEntity assignee) {
         TaskEntity taskEntity = new TaskEntity();

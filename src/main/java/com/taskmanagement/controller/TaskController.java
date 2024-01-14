@@ -22,13 +22,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskController {
 
+
     private final TaskService taskService;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponseDTO createTask(@RequestBody @Valid TaskDTO taskDTO, Principal principal) throws TaskApiException, TaskBadRequestException {
         return taskService.createTask(taskDTO, principal.getName());
     }
+
 
     @PutMapping("/update-by-author/{taskId}")
     public TaskResponseDTO updateTaskByAuthor(
@@ -38,6 +41,7 @@ public class TaskController {
     ) throws TaskApiException, TaskBadRequestException, UserApiException {
         return taskService.updateTaskByAuthor(taskId, taskDTO, principal.getName());
     }
+
 
     @PutMapping("/update-by-assignee/{taskId}")
     public TaskResponseDTO updateTaskByAssignee(
@@ -62,6 +66,7 @@ public class TaskController {
         return taskService.getTasksByAssignee(principal.getName(), authorEmail);
     }
 
+
     @GetMapping("/author/tasks")
     public List<TaskResponseDTO> getAllTasksByAuthor(
             Principal principal,
@@ -70,6 +75,7 @@ public class TaskController {
             @RequestParam(required = false) String taskPriority) throws TaskApiException, TaskBadRequestException {
         return taskService.getTasksByAuthor(principal.getName(), assigneeEmail, taskStatus, taskPriority);
     }
+
 
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

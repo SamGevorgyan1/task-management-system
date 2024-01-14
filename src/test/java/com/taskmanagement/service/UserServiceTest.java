@@ -31,6 +31,7 @@ import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+
     @Mock
     private UserRepository userRepository;
 
@@ -127,7 +128,6 @@ public class UserServiceTest {
                 .surname("Avagyan")
                 .year(2001)
                 .build();
-
 
         UserResponseDTO updatedUser = userService.updateUser(userId, updatedUserDTO);
         assertEquals(updatedUserDTO.getName(), updatedUser.getName());
@@ -233,12 +233,11 @@ public class UserServiceTest {
 
         assertUsersEqual(filteredUsersBySurname, users);
 
-        //given(userRepository.findAll()).willThrow(new RuntimeException("Repository error"));
+
 
     }
 
     private void assertUsersEqual(List<UserResponseDTO> userResponseDTOs, List<UserEntity> userEntities) {
-        //assertThat(userResponseDTOs).hasSize(userEntities.size());
 
         for (int i = 0; i < userEntities.size(); i++) {
             UserEntity userEntity = userEntities.get(i);
@@ -253,6 +252,4 @@ public class UserServiceTest {
             assertEquals(userEntity.getRole(), userResponseDTO.getRole());
         }
     }
-
-
 }

@@ -13,5 +13,4 @@ public interface AuthService {
      AuthenticationResponseDTO login (AuthenticationDTO authenticationDTO) throws AuthApiException, AuthBadRequestException, UserBadRequestException;
 
      boolean register(UserDTO userDTO) throws AuthApiException, UserBadRequestException;
-
 }

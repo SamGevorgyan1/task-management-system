@@ -13,6 +13,7 @@ import java.util.List;
 
 
 public interface TaskService {
+
     TaskResponseDTO createTask(TaskDTO taskDTO, String authorEmail) throws TaskApiException, TaskBadRequestException;
 
     TaskResponseDTO updateTaskByAuthor(Integer taskId, TaskDTO taskDTO, String updaterEmail) throws TaskApiException, TaskBadRequestException, UserApiException;
@@ -26,8 +27,4 @@ public interface TaskService {
     List<TaskResponseDTO> getTasksByAuthor(String authorEmail,String assigneeEmail, String taskStatus, String taskPriority) throws TaskApiException, TaskBadRequestException;
 
     List<TaskResponseDTO> getTasksByAssignee(String  assigneeEmail,String authorEmail) throws TaskApiException;
-
-
-
-
 }

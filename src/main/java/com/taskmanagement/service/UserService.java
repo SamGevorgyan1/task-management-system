@@ -30,5 +30,4 @@ public interface UserService {
     void delete(Integer id) throws UserApiException, UserBadRequestException;
 
     void sendVerificationCode(String email) throws UserApiException, UserBadRequestException;
-
 }

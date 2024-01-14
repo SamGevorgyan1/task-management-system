@@ -94,6 +94,7 @@ public class CommentServiceTest {
 
     }
 
+
     @Test
     void deleteCommentTest() throws CommentApiException {
 
@@ -117,6 +118,7 @@ public class CommentServiceTest {
 
 
     }
+
 
     @Test
     void getCommentByIdTest() throws CommentApiException {
@@ -145,6 +147,7 @@ public class CommentServiceTest {
         assertThrows(CommentApiException.class, () -> commentService.getCommentById(1));
 
     }
+
 
     @Test
     void getCommentsByTaskIdTest() throws CommentApiException {
@@ -178,6 +181,7 @@ public class CommentServiceTest {
 
 
     }
+
 
     @Test
     void updateCommentTest() throws CommentApiException {

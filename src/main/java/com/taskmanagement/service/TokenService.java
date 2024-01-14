@@ -14,6 +14,4 @@ public interface TokenService {
     void revokeAllUserTokens(UserEntity user) throws TokenApiException;
 
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws TokenApiException, IOException;
-
-
 }

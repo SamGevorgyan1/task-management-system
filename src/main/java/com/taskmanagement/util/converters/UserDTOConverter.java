@@ -20,6 +20,7 @@ public class UserDTOConverter {
                 .build();
     }
 
+
     public static List<UserResponseDTO> convertUserEntitiesToDTOS(List<UserEntity> userEntities) {
         return userEntities.stream()
                 .map(UserDTOConverter::convertUserEntityToDTO)

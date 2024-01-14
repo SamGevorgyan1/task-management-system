@@ -11,6 +11,7 @@ public class TaskEmailSender {
     @Autowired
     private  JavaMailSender mailSender;
 
+
     public void sendEmail(String to,String subject,String text){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("samg05981@gmail.com");

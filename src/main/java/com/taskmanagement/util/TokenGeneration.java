@@ -8,6 +8,7 @@ public class TokenGeneration {
         return RandomStringUtils.random(4, true, false);
     }
 
+
     public static String generateResetToken() {
         return RandomStringUtils.random(7, false, true);
     }
