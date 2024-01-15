@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // TODO: Uncomment and use if TaskEmailSender is available
+    // TODO:
     // private final TaskEmailSender taskEmailSender;
 
     /**

@@ -183,6 +183,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+
     private boolean checkCommentPermission(TaskEntity task, String userEmail) {
         return task.getAuthor().getEmail().equals(userEmail) || task.getAssignee().getEmail().equals(userEmail);
     }

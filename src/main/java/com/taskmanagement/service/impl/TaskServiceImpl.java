@@ -23,6 +23,7 @@ import static com.taskmanagement.util.converters.TaskDTOConverter.convertTaskEnt
 import static com.taskmanagement.util.converters.TaskDTOConverter.convertTaskEntityToDTOs;
 import static com.taskmanagement.util.messages.CommonErrorMessage.UNAUTHORIZED_OPERATION_MSG;
 import static com.taskmanagement.util.messages.TaskErrorMessage.*;
+import static com.taskmanagement.util.messages.UserErrorMessage.ERROR_GETTING_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -95,10 +96,10 @@ public class TaskServiceImpl implements TaskService {
         // Parse the task status from the provided string.
         TaskStatus taskStatus;
 
-       validateTaskId(taskId);
+        validateTaskId(taskId);
 
         if (status == null || status.isEmpty()) {
-            throw new TaskBadRequestException("Task status can not be null or empty");
+            throw new TaskBadRequestException(TASK_STATUS_NULL_OR_EMPTY);
         }
         taskStatus = parseEnum(status, TaskStatus.class, new TaskBadRequestException(INVALID_TASK_STATUS));
 
@@ -107,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
         // Update the task status and save the task.
         task.setStatus(taskStatus);
-        saveTask(task, "Error during updating task");
+        saveTask(task, ERROR_UPDATING_TASK);
 
         // Convert the result to TaskResponseDTO.
         return convertTaskEntityToDTO(task);
@@ -258,16 +259,16 @@ public class TaskServiceImpl implements TaskService {
      * @throws TaskApiException If an error occurs during the initialization process.
      */
     private TaskEntity initializeTaskFromDTO(TaskDTO taskDTO, UserEntity author) throws TaskApiException {
-        TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setTaskId(0); // Set task ID to a default value.
-        taskEntity.setTitle(taskDTO.getTitle());
-        taskEntity.setDescription(taskDTO.getDescription());
-        taskEntity.setComments(new ArrayList<>());
-        taskEntity.setStatus(Enum.valueOf(TaskStatus.class, taskDTO.getTaskStatus()));
-        taskEntity.setPriority(Enum.valueOf(TaskPriority.class, taskDTO.getTaskPriority()));
-        taskEntity.setAuthor(author);
-        taskEntity.setAssignee(getUserByEmail(taskDTO.getAssigneeEmail(), ASSIGNEE_NOT_FOUND));
-        return taskEntity;
+        return TaskEntity.builder()
+                .taskId(0)
+                .title(taskDTO.getTitle())
+                .description(taskDTO.getDescription())
+                .status(Enum.valueOf(TaskStatus.class, taskDTO.getTaskStatus()))
+                .priority(Enum.valueOf(TaskPriority.class, taskDTO.getTaskPriority()))
+                .comments(new ArrayList<>())
+                .author(author)
+                .assignee(getUserByEmail(taskDTO.getAssigneeEmail(), ASSIGNEE_NOT_FOUND))
+                .build();
     }
 
 
@@ -341,7 +342,7 @@ public class TaskServiceImpl implements TaskService {
             // Attempt to retrieve the user from the repository based on the email.
             user = userRepository.findByEmail(email);
         } catch (Exception e) {
-            throw new TaskApiException("Error during getting user");
+            throw new TaskApiException(ERROR_GETTING_USER);
         }
 
         // If the user is not present in the optional, throw UserNotFoundException.
@@ -356,7 +357,7 @@ public class TaskServiceImpl implements TaskService {
 
     private void validateTaskId(Integer taskId) throws TaskBadRequestException {
         if (taskId == null) {
-            throw new TaskBadRequestException("Task id can not be null");
+            throw new TaskBadRequestException(TASK_ID_NULL);
         }
     }
 }

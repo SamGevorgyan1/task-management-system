@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.taskmanagement.util.messages.AuthErrorMessage.*;
 import static com.taskmanagement.util.messages.UserErrorMessage.ERROR_CREATING_USER;
 import static com.taskmanagement.validator.UserValidator.passwordValidator;
 
@@ -47,15 +48,15 @@ public class AuthServiceImpl implements AuthService {
         try {
             user = userService.findByEmail(authenticationDTO.getEmail());
         } catch (UserApiException e) {
-            throw new AuthApiException("Error during authentication");
+            throw new AuthApiException(ERROR_DURING_AUTHENTICATION);
         } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("Wrong email or password");
+            throw new UserNotFoundException(WRONG_EMAIL_PASSWORD);
         } catch (UserBadRequestException e) {
             throw new RuntimeException();
         }
 
         if (user.getStatus() == UserStatus.INACTIVE) {
-            throw new AuthBadRequestException("User account is inactive. Verify your account before logging in.");
+            throw new AuthBadRequestException(INACTIVE_USER_ACCOUNT);
         }
 
         try {
@@ -81,11 +82,12 @@ public class AuthServiceImpl implements AuthService {
                     .build();
 
         } catch (BadCredentialsException e) {
-            throw new AuthBadRequestException("Wrong email or password");
+            throw new AuthBadRequestException(WRONG_EMAIL_PASSWORD);
         } catch (TokenApiException e) {
-            throw new AuthApiException("Error during authentication");
+            throw new AuthApiException(ERROR_DURING_AUTHENTICATION);
         }
     }
+
 
     @Override
     public boolean register(UserDTO userDTO) throws AuthApiException, UserBadRequestException {
@@ -100,6 +102,7 @@ public class AuthServiceImpl implements AuthService {
 
         return true;
     }
+
 
     private Map<String, Object> buildTokenClaims(UserEntity user) {
         Map<String, Object> claim = new HashMap<>();
